@@ -55,7 +55,7 @@ jobs:
         env:
           # GITHUB_TOKEN「https://github.com/settings/tokens」推送代码评审结果到github上
           CODE_REVIEW_LOG_PUSH_GITHUB_TOKEN: ${{ secrets.CODE_REVIEW_LOG_PUSH_GITHUB_TOKEN }}
-          # Github 配置；GITHUB_REVIEW_LOG_URI「https://github.com/LeoZhang07/openai-code-review/tree/log」
+          # 配置评审日志归档地址 GITHUB_REVIEW_LOG_URI「https://github.com/LeoZhang07/openai-code-review/tree/log」
           CODE_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
 
           COMMIT_PROJECT: ${{ env.REPO_NAME }}
