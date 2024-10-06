@@ -35,21 +35,13 @@ jobs:
         run: wget -O ./libs/openai-code-review-sdk-1.0.jar https://github.com/LeoZhang07/openai-code-review/releases/download/v1.0/openai-code-review-sdk-1.0.jar
 
 
-      - name: Get repository name
-        id: repo-name
-        run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
-
-      - name: Get branch name
-        id: branch-name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
-      - name: Get commit author
-        id: commit-author
-        run: echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
-
-      - name: Get commit message
-        id: commit-message
-        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+      - name: Get repository name、Get branch name、Get commit author、Get commit message
+        id: push-messages
+        run:
+          echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
 
       - name: Print repository, branch name, commit author, and commit message
         run: |
@@ -61,10 +53,11 @@ jobs:
       - name: Run Code Review
         run: java -jar ./libs/openai-code-review-sdk-1.0.jar
         env:
-          # GITHUB_TOKEN「https://github.com/settings/tokens」
-          GITHUB_TOKEN: ${{ secrets.CODE_TOKEN }}
+          # GITHUB_TOKEN「https://github.com/settings/tokens」推送代码评审结果到github上
+          CODE_REVIEW_LOG_PUSH_GITHUB_TOKEN: ${{ secrets.CODE_REVIEW_LOG_PUSH_GITHUB_TOKEN }}
           # Github 配置；GITHUB_REVIEW_LOG_URI「https://github.com/LeoZhang07/openai-code-review/tree/log」
           CODE_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
+
           COMMIT_PROJECT: ${{ env.REPO_NAME }}
           COMMIT_BRANCH: ${{ env.BRANCH_NAME }}
           COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
@@ -74,6 +67,7 @@ jobs:
           WEIXIN_SECRET: ${{ secrets.WEIXIN_SECRET }}
           WEIXIN_TOUSER: ${{ secrets.WEIXIN_TOUSER }}
           WEIXIN_TEMPLATE_ID: ${{ secrets.WEIXIN_TEMPLATE_ID }}
-          # OpenAi - ChatGLM 配置「https://open.bigmodel.cn/api/paas/v4/chat/completions」、「https://open.bigmodel.cn/usercenter/apikeys」
+          # OpenAi - ChatGLM 配置「https://open.bigmodel.cn/api/paas/v4/chat/completions」、
           CHATGLM_APIHOST: ${{ secrets.CHATGLM_APIHOST }}
+          # OpenAi - ChatGLM 配置「https://open.bigmodel.cn/usercenter/apikeys」e084e7abb3c3db14f8af16dc15b96910.oI9CwFiLsBRuX0BE
           CHATGLM_APIKEYSECRET: ${{ secrets.CHATGLM_APIKEYSECRET }}
