@@ -1,17 +1,19 @@
 name: Build and Run OpenAiCodeReview By Main Maven Jar
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - log
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    # 使用的是GitHub提供的官方checkout动作，版本为v2；来检出最近的两个提交
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -27,8 +29,10 @@ jobs:
       - name: Create libs directory
         run: mkdir -p ./libs
 
+      # 下载代码评审sdk包
       - name: Download openai-code-review-sdk JAR
-        run: wget -O ./libs/openai-code-review-sdk-1.0.jar https://github.com/fuzhengwei/openai-code-review-log/releases/download/v1.0/openai-code-review-sdk-1.0.jar
+        run: wget -O ./libs/openai-code-review-sdk-1.0.jar https://github.com/LeoZhang07/openai-code-review/releases/download/v1.0/openai-code-review-sdk-1.0.jar
+
 
       - name: Get repository name
         id: repo-name
@@ -56,9 +60,10 @@ jobs:
       - name: Run Code Review
         run: java -jar ./libs/openai-code-review-sdk-1.0.jar
         env:
-          # Github 配置；GITHUB_REVIEW_LOG_URI「https://github.com/xfg-studio-project/openai-code-review-log」、GITHUB_TOKEN「https://github.com/settings/tokens」
-          GITHUB_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
+          # GITHUB_TOKEN「https://github.com/settings/tokens」
           GITHUB_TOKEN: ${{ secrets.CODE_TOKEN }}
+          # Github 配置；GITHUB_REVIEW_LOG_URI「https://github.com/LeoZhang07/openai-code-review/tree/log」
+          CODE_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
           COMMIT_PROJECT: ${{ env.REPO_NAME }}
           COMMIT_BRANCH: ${{ env.BRANCH_NAME }}
           COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}

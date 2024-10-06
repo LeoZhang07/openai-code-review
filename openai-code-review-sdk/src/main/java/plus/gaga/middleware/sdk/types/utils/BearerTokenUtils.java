@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * ChatGLM token获取
+ *
+ * @author leo
+ */
 public class BearerTokenUtils {
 
     // 过期时间；默认30分钟

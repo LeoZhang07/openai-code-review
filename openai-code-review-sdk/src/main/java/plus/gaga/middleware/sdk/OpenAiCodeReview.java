@@ -12,18 +12,18 @@ public class OpenAiCodeReview {
 
     private static final Logger logger = LoggerFactory.getLogger(OpenAiCodeReview.class);
 
-    // 配置配置
-    private String weixin_appid = "wx5a228ff69e28a91f";
-    private String weixin_secret = "0bea03aa1310bac050aae79dd8703928";
-    private String weixin_touser = "or0Ab6ivwmypESVp_bYuk92T6SvU";
-    private String weixin_template_id = "l2HTkntHB71R4NQTW77UkcqvSOIFqE_bss1DAVQSybc";
+    // wx配置配置
+    private String weixin_appid = "wxd407f6742f84a93f";
+    private String weixin_secret = "c977f75bae661a41914ff32e1c54c78d";
+    private String weixin_touser = "oLuWP6L5qkSGQm1JqjccpeCh7-jU";
+    private String weixin_template_id = "ebeH7bkbdjVrfBFAHqkksRre75XBJjsE-7VIrhY35MQ";
 
     // ChatGLM 配置
     private String chatglm_apiHost = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
-    private String chatglm_apiKeySecret = "";
+    private String chatglm_apiKeySecret = "e084e7abb3c3db14f8af16dc15b96910.oI9CwFiLsBRuX0BE";
 
-    // Github 配置
-    private String github_review_log_uri;
+    // 代码评审结果存在 github上
+    private String code_review_log_uri;
     private String github_token;
 
     // 工程配置 - 自动获取
@@ -33,7 +33,7 @@ public class OpenAiCodeReview {
 
     public static void main(String[] args) throws Exception {
         GitCommand gitCommand = new GitCommand(
-                getEnv("GITHUB_REVIEW_LOG_URI"),
+                getEnv("CODE_REVIEW_LOG_URI"),
                 getEnv("GITHUB_TOKEN"),
                 getEnv("COMMIT_PROJECT"),
                 getEnv("COMMIT_BRANCH"),
@@ -61,6 +61,12 @@ public class OpenAiCodeReview {
         logger.info("openai-code-review done!");
     }
 
+    /**
+     * 获取操作系统的环境变量
+     *
+     * @param key
+     * @return
+     */
     private static String getEnv(String key) {
         String value = System.getenv(key);
         if (null == value || value.isEmpty()) {
