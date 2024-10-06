@@ -3,9 +3,7 @@ name: Build and Run OpenAiCodeReview By Main Maven Jar
 on:
   push:
     branches:
-      - openai-code-review
-      # - '*'
-      # for action testing
+      - openAI-code-review
   pull_request:
     branches:
       - master
