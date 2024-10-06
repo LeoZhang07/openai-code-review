@@ -5,6 +5,7 @@ on:
     branches:
       - openai-code-review
       # - '*'
+      # for action testing
   pull_request:
     branches:
       - master
