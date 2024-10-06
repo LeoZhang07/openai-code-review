@@ -35,13 +35,21 @@ jobs:
         run: wget -O ./libs/openai-code-review-sdk-1.0.jar https://github.com/LeoZhang07/openai-code-review/releases/download/v1.0/openai-code-review-sdk-1.0.jar
 
 
-      - name: Get repository name、Get branch name、Get commit author、Get commit message
-        id: push-messages
-        run:
-          echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
-          echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+      - name: Get repository name
+        id: repo-name
+        run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+
+      - name: Get branch name
+        id: branch-name
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Get commit author
+        id: commit-author
+        run: echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
+
+      - name: Get commit message
+        id: commit-message
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
 
       - name: Print repository, branch name, commit author, and commit message
         run: |
@@ -59,7 +67,7 @@ jobs:
           CODE_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
 
           COMMIT_PROJECT: ${{ env.REPO_NAME }}
-          COMMIT_BRANCH: ${{ env.BRANCH_NAME }}
+          COMMIT_BRANCH: ${{ env.REPO_NAME }}
           COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
           COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
           # 微信配置 「https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index」
